@@ -1,4 +1,5 @@
-import { Notice, Plugin } from 'obsidian';
+import { Notice, Plugin, TFolder } from 'obsidian';
+import * as path from 'path';
 import { ClaudeBridge } from './claude-bridge';
 import { ClaudeCodeSettingTab, ClaudeCodeSettings, DEFAULT_SETTINGS } from './settings';
 import { TerminalManager } from './terminal-manager';
@@ -39,6 +40,28 @@ export default class ClaudeCodePlugin extends Plugin {
       },
     });
 
+    this.registerEvent(
+      this.app.workspace.on('file-menu', (menu, file) => {
+        if (!(file instanceof TFolder)) return;
+
+        const vaultPath = (this.app.vault.adapter as unknown as { basePath?: string }).basePath;
+        if (!vaultPath) return;
+
+        const folderAbsPath = file.isRoot()
+          ? vaultPath
+          : path.join(vaultPath, file.path);
+
+        menu.addItem(item =>
+          item
+            .setTitle('Run Claude Code here')
+            .setIcon('terminal')
+            .onClick(() => {
+              this.launchInFolder(folderAbsPath);
+            })
+        );
+      })
+    );
+
     this.addSettingTab(new ClaudeCodeSettingTab(this.app, this));
 
     if (this.settings.openOnStartup) {
@@ -69,7 +92,10 @@ export default class ClaudeCodePlugin extends Plugin {
     }
 
     const cwd = this.settings.workingDirectory.trim() || vaultPath;
+    this.launchInFolder(cwd);
+  }
 
+  private launchInFolder(cwd: string): void {
     this.claudeBridge.launch({
       vaultPath: cwd,
       ccPath: this.settings.ccPath,
