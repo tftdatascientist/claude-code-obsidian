@@ -1,0 +1,37 @@
+{
+  "name": "claude-code-obsidian",
+  "version": "0.1.0",
+  "description": "Obsidian plugin integrating Claude Code CLI via obsidian-terminal",
+  "main": "main.js",
+  "scripts": {
+    "dev": "node esbuild.config.mjs",
+    "build": "tsc --noEmit && node esbuild.config.mjs production && node scripts/copy-pty.mjs",
+    "package": "node scripts/copy-pty.mjs && cp manifest.json styles.css dist/",
+    "lint": "eslint src --ext .ts",
+    "test": "jest"
+  },
+  "keywords": [
+    "obsidian",
+    "claude",
+    "terminal",
+    "ai"
+  ],
+  "author": "tftdatascientist",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^18.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "builtin-modules": "^3.3.0",
+    "esbuild": "^0.20.0",
+    "eslint": "^8.0.0",
+    "obsidian": "^1.4.0",
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@lydell/node-pty": "^1.2.0-beta.12",
+    "@lydell/node-pty-win32-x64": "^1.2.0-beta.12",
+    "@xterm/addon-fit": "^0.11.0",
+    "@xterm/xterm": "^6.0.0"
+  }
+}

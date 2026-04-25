@@ -1,0 +1,15 @@
+.claude-terminal-container {
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--background-primary);
+}
+
+.claude-terminal-container .xterm {
+  height: 100%;
+  padding: 8px;
+}
+
+.claude-terminal-container .xterm-viewport {
+  background-color: transparent !important;
+}
