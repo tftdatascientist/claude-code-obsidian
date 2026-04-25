@@ -68,8 +68,10 @@ export default class ClaudeCodePlugin extends Plugin {
       return;
     }
 
+    const cwd = this.settings.workingDirectory.trim() || vaultPath;
+
     this.claudeBridge.launch({
-      vaultPath,
+      vaultPath: cwd,
       ccPath: this.settings.ccPath,
       startupArgs: this.settings.startupArgs,
     });
